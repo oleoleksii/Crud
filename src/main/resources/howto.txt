@@ -1,0 +1,121 @@
+0. configure application.properties with valid settings
+
+1. Daily income report:
+GET: http://localhost:8080/report/dailyIncome
+
+2. SELECT all:
+GET: http://localhost:8080/product/
+GET: http://localhost:8080/order/
+GET: http://localhost:8080/category/
+GET: http://localhost:8080/orderItem/
+
+3. SELECT one (last digit - id):
+GET: http://localhost:8080/product/1
+GET: http://localhost:8080/order/1
+GET: http://localhost:8080/category/1
+GET: http://localhost:8080/orderItem/1
+
+4. DELETE one (last digit - id):
+DELETE: http://localhost:8080/product/1 (can't delete if it's in orderItems)
+DELETE: http://localhost:8080/category/1  (can't delete if category has products)
+DELETE: http://localhost:8080/orderItem/4 (can't delete if order with this orderItem exists)
+DELETE: http://localhost:8080/order/4 (in addition deletes orderItems)
+
+5.
+A. INSERT PRODUCT
+POST: http://localhost:8080/product/
+
+product with new category
+{
+  "price":130.55,
+  "sku":"productsku-1",
+  "name" : "productname",
+  "category":{
+    "name":"new_category_name"
+  }
+}
+
+product in existing category
+{
+  "price":130.55,
+  "sku":"productsku-1",
+  "name" : "productname",
+  "category":{
+    "id": 2
+  }
+}
+
+B. INSERT CATEGORY
+POST: http://localhost:8080/category/
+
+with new products:
+{
+  "name" : "football_equipment",
+  "products" : [
+    {"price" : 10.00,
+     "sku" : "12345_t-shirt",
+     "name" : "some_name"},
+    {"price" : 12.00,
+     "sku" : "boots",
+     "name" : "nike"}
+    ]
+}
+
+without products:
+{
+  "name" : "football_equipment2"
+}
+
+C. INSERT ORDER ITEM
+POST: http://localhost:8080/orderItem/
+{
+  "quantity" : 30,
+  "product" : {
+  	"id" : 18
+  }
+}
+
+D. INSERT ORDER
+POST: http://localhost:8080/order/
+{
+  "total" : 15000,
+  "orderDate" : "2016-11-20",
+  "orderItems" : [{"id" : 5},
+                  {"id" : 6}]
+}
+
+6. UPDATE CATEGORY
+PUT http://localhost:8080/category/1
+{
+	"name" : "new name"
+}
+we can change category for product with such request:
+PUT http://localhost:8080/category/1
+{
+	"products" : [{"id" : 123}]
+}
+
+UPDATE ORDERITEM (last digit - id)
+http://localhost:8080/orderItem/1
+{
+    "quantity" : 100
+}
+
+UPDATE PRODUCT
+{
+	"price" : 15,
+  	"sku" : "sku1234",
+  	"name" : "name"
+}
+
+7. Elastic search:
+POST: http://192.168.0.2:9200/product/product/_search
+{
+"query": {
+    "wildcard": {
+       "name": {
+          "value": "*some_fragment*"
+       }
+    }
+}
+}

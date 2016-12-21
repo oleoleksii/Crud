@@ -1,0 +1,286 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: vasylenko
+      changes:
+        - createTable:
+            tableName: t_category
+            columns:
+              - column:
+                  name: category_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+        - createTable:
+            tableName: t_product
+            columns:
+              - column:
+                  name: product_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: price
+                  type: numeric(19,2)
+              - column:
+                  name: sku
+                  type: varchar(255)
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_product_category
+                    references: t_category(category_id)
+        - createTable:
+            tableName: t_order
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_date
+                  type: timestamp
+              - column:
+                  name: total
+                  type: numeric(19,2)
+        - createTable:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: order_item_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: integer
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_order_item_order
+                    references: t_order(order_id)
+        - createTable:
+            tableName: t_order_item_product
+            columns:
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_order_item_product_product
+                    references: t_product(product_id)
+              - column:
+                  name: order_item_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_order_item_product_order_item
+                    references: t_order_item(order_item_id)
+  - changeSet:
+      id: 2
+      author: vasylenko
+      comment: "test data"
+      changes:
+        - insert:
+            tableName: t_category
+            columns:
+              - column:
+                  name: name
+                  value: photo
+        - insert:
+            tableName: t_category
+            columns:
+              - column:
+                  name: name
+                  value: football
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: canon
+              - column:
+                  name: price
+                  value: 700
+              - column:
+                  name: sku
+                  value: canon-1
+              - column:
+                  name: category_id
+                  value: 1
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: sony
+              - column:
+                  name: price
+                  value: 1700
+              - column:
+                  name: sku
+                  value: sony-1
+              - column:
+                  name: category_id
+                  value: 1
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: nikon
+              - column:
+                  name: price
+                  value: 1500
+              - column:
+                  name: sku
+                  value: nikon-1
+              - column:
+                  name: category_id
+                  value: 1
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: tshirt
+              - column:
+                  name: price
+                  value: 7
+              - column:
+                  name: sku
+                  value: tshort-1
+              - column:
+                  name: category_id
+                  value: 2
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: shorts
+              - column:
+                  name: price
+                  value: 5
+              - column:
+                  name: sku
+                  value: shorts-1
+              - column:
+                  name: category_id
+                  value: 2
+        - insert:
+            tableName: t_product
+            columns:
+              - column:
+                  name: name
+                  value: boots
+              - column:
+                  name: price
+                  value: 70
+              - column:
+                  name: sku
+                  value: boots-1
+              - column:
+                  name: category_id
+                  value: 2
+        - insert:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: quantity
+                  value: 3
+        - insert:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: quantity
+                  value: 2
+        - insert:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: quantity
+                  value: 4
+        - insert:
+            tableName: t_order_item_product
+            columns:
+              - column:
+                  name: product_id
+                  value: 1
+              - column:
+                  name: order_item_id
+                  value: 1
+        - insert:
+            tableName: t_order_item_product
+            columns:
+              - column:
+                  name: product_id
+                  value: 5
+              - column:
+                  name: order_item_id
+                  value: 2
+        - insert:
+            tableName: t_order_item_product
+            columns:
+              - column:
+                  name: product_id
+                  value: 6
+              - column:
+                  name: order_item_id
+                  value: 3
+        - insert:
+            tableName: t_order
+            columns:
+              - column:
+                  name: order_date
+                  value: 2016-05-15
+              - column:
+                  name: total
+                  value: 700
+        - insert:
+            tableName: t_order
+            columns:
+              - column:
+                  name: order_date
+                  value: 2016-07-12
+              - column:
+                  name: total
+                  value: 1700
+        - update:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: order_id
+                  value: 1
+            where: order_item_id = 1
+        - update:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: order_id
+                  value: 1
+            where: order_item_id = 2
+        - update:
+            tableName: t_order_item
+            columns:
+              - column:
+                  name: order_id
+                  value: 2
+            where: order_item_id = 3
